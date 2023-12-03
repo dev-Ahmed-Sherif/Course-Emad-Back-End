@@ -56,7 +56,7 @@ const handleNewUser = async (req, res) => {
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "30s" }
     );
-    const newRefreshToken = jwt.sign(
+    const RefreshToken = jwt.sign(
       { email: foundUser.email },
       process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: "1d" }
@@ -65,7 +65,7 @@ const handleNewUser = async (req, res) => {
     // console.log(newRefreshToken);
 
     // Creates Secure Cookie with refresh token
-    res.cookie("jwt", newRefreshToken, {
+    res.cookie("jwt", RefreshToken, {
       httpOnly: true,
       secure: true,
       sameSite: "None",
@@ -80,7 +80,7 @@ const handleNewUser = async (req, res) => {
     );
 
     // Send authorization roles and access token to user
-    res.status(200).json({ foundUser, roles, accessToken });
+    res.status(200).json({ foundUser, roles, accessToken, RefreshToken });
   } catch (err) {
     res.status(500).json({ message: err.message });
   }

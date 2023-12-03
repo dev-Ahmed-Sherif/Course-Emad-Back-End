@@ -81,7 +81,7 @@ const handleLogin = async (req, res) => {
     });
 
     // Send authorization roles and access token to user
-    res.json({ foundUser, roles, accessToken });
+    res.json({ foundUser, roles, accessToken, newRefreshToken });
   } else {
     res.status(200).send({ messagePass: "الباسور غير صحيح" });
   }
