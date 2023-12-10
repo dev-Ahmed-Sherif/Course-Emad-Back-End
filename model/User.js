@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema(
     roles: {
       User: {
         type: Number,
-        default: 7,
+        // default: 7,
       },
       Instractor: Number,
       Admin: Number,

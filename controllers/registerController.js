@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 let options = {
   year: "numeric",
-  month: "long",
+  month: "numeric",
   day: "numeric",
   hour: "numeric",
   minute: "numeric",
@@ -31,6 +31,7 @@ const handleNewUser = async (req, res) => {
       email: email,
       password: hashedPwd,
       phoneNumber: tel,
+      roles: { User: 7 },
       dateRegister: new Date().toLocaleDateString("ar-EG", options),
     });
 
