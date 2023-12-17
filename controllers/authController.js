@@ -4,7 +4,11 @@ const jwt = require("jsonwebtoken");
 
 const handleLogin = async (req, res) => {
   const cookie = req.cookies?.jwt;
-  console.log(`cookie available at login: ${JSON.stringify(cookie)}`);
+  console.log(
+    `cookie available at login: ${JSON.stringify(
+      cookie
+    )} at ${new Date().getHours()}:${new Date().getMinutes()}`
+  );
   const { email, pwd } = req.body;
   if (!email || !pwd)
     return res
@@ -12,14 +16,14 @@ const handleLogin = async (req, res) => {
       .json({ message: "Username and password are required." });
 
   const foundUser = await User.findOne({ email: email }).exec();
-  console.log(`foundUser`, foundUser);
+  // console.log(`foundUser`, foundUser);
   if (!foundUser)
     return res.status(200).send({ messageEmail: "هذا الإيميل لا يمتلك حساب" }); //Unauthorized
   // evaluate password
   const match = await bcrypt.compare(pwd, foundUser.password);
   if (match) {
     const roles = Object.values(foundUser.roles).filter(Boolean);
-    console.log(`roles: ${JSON.stringify(roles)}`);
+    console.log(`User roles: ${JSON.stringify(roles)}`);
     // create JWTs
     const accessToken = jwt.sign(
       {
@@ -34,8 +38,10 @@ const handleLogin = async (req, res) => {
     const newRefreshToken = jwt.sign(
       { email: foundUser.email },
       process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "30d" }
     );
+
+    console.log(`New Token: ${newRefreshToken}`);
 
     // Changed to let keyword
     let newRefreshTokenArray = !cookie?.jwt
@@ -52,7 +58,7 @@ const handleLogin = async (req, res) => {
       const refreshToken = cookie.jwt;
       const foundToken = await User.findOne({ refreshToken }).exec();
 
-      console.log(`FoundToken ${foundToken}`);
+      // console.log(`FoundToken ${foundToken}`);
 
       // Detected refresh token reuse!
       if (!foundToken) {
@@ -71,8 +77,8 @@ const handleLogin = async (req, res) => {
     // Saving refreshToken with current user
     foundUser.refreshToken = [...newRefreshTokenArray, newRefreshToken];
     const result = await foundUser.save();
-    console.log(result);
-    console.log(roles);
+    console.log(`User After Login :`, result);
+    // console.log(roles);
 
     // Creates Secure Cookie with refresh token
     res.cookie("jwt", newRefreshToken, {

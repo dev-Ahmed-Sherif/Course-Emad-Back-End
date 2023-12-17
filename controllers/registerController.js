@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 
 let options = {
   year: "numeric",
-  month: "numeric",
+  month: "long",
   day: "numeric",
   hour: "numeric",
   minute: "numeric",
