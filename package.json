@@ -4,8 +4,8 @@
   "description": "project for online courses",
   "main": "server.js",
   "scripts": {
-    "start": "node index",
-    "dev": "nodemon index",
+    "start": "node server",
+    "dev": "nodemon server",
     "backup": "nodemon backup",
     "all": "npm-run-all --parallel dev backup"
   },
