@@ -12,7 +12,7 @@ const fileSizeLimiter = require("../middleware/fileSizeLimiter");
 
 router.post(
   "/add",
-  verifyRoles(ROLES_LIST.Admin),
+  verifyRoles(ROLES_LIST.Admin, ROLES_LIST.SuperAdmin),
   fileUpload({ createParentPath: true }),
   filesPayloadExists,
   fileExtLimiter([".png", ".jpg", ".jpeg"]),

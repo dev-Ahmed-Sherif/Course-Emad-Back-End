@@ -19,7 +19,7 @@ const handleAdd = async (req, res) => {
   const files = req.files;
   const { name } = req.body;
   //   console.log(files);
-  //   console.log(body);
+  console.log(req.body);
 
   let Ext;
 
